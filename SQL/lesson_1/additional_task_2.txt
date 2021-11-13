@@ -1,0 +1,35 @@
+|constraint_catalog|constraint_schema|constraint_name               |table_catalog|table_schema|table_name   |constraint_type|is_deferrable|initially_deferred|
+|------------------|-----------------|------------------------------|-------------|------------|-------------|---------------|-------------|------------------|
+|dvd-rental        |public           |category_pkey                 |dvd-rental   |public      |category     |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |film_category_film_id_fkey    |dvd-rental   |public      |film_category|FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |film_category_category_id_fkey|dvd-rental   |public      |film_category|FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |film_category_pkey            |dvd-rental   |public      |film_category|PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |payment_staff_id_fkey         |dvd-rental   |public      |payment      |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |payment_rental_id_fkey        |dvd-rental   |public      |payment      |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |payment_customer_id_fkey      |dvd-rental   |public      |payment      |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |payment_pkey                  |dvd-rental   |public      |payment      |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |film_language_id_fkey         |dvd-rental   |public      |film         |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |film_pkey                     |dvd-rental   |public      |film         |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |actor_pkey                    |dvd-rental   |public      |actor        |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |customer_address_id_fkey      |dvd-rental   |public      |customer     |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |customer_pkey                 |dvd-rental   |public      |customer     |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |film_actor_film_id_fkey       |dvd-rental   |public      |film_actor   |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |film_actor_actor_id_fkey      |dvd-rental   |public      |film_actor   |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |film_actor_pkey               |dvd-rental   |public      |film_actor   |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |language_pkey                 |dvd-rental   |public      |language     |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |country_pkey                  |dvd-rental   |public      |country      |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |fk_city                       |dvd-rental   |public      |city         |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |city_pkey                     |dvd-rental   |public      |city         |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |inventory_film_id_fkey        |dvd-rental   |public      |inventory    |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |inventory_pkey                |dvd-rental   |public      |inventory    |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |rental_staff_id_key           |dvd-rental   |public      |rental       |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |rental_inventory_id_fkey      |dvd-rental   |public      |rental       |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |rental_customer_id_fkey       |dvd-rental   |public      |rental       |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |rental_pkey                   |dvd-rental   |public      |rental       |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |fk_address_city               |dvd-rental   |public      |address      |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |address_pkey                  |dvd-rental   |public      |address      |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |staff_address_id_fkey         |dvd-rental   |public      |staff        |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |staff_pkey                    |dvd-rental   |public      |staff        |PRIMARY KEY    |NO           |NO                |
+|dvd-rental        |public           |store_manager_staff_id_fkey   |dvd-rental   |public      |store        |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |store_address_id_fkey         |dvd-rental   |public      |store        |FOREIGN KEY    |NO           |NO                |
+|dvd-rental        |public           |store_pkey                    |dvd-rental   |public      |store        |PRIMARY KEY    |NO           |NO                |
