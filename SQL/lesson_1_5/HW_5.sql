@@ -1,17 +1,19 @@
 --ЗАДАНИЕ №1
 --Сделайте запрос к таблице payment и с помощью оконных функций добавьте вычисляемые колонки согласно условиям:
---Пронумеруйте все платежи от 1 до N по дате
---Пронумеруйте платежи для каждого покупателя, сортировка платежей должна быть по дате
---Посчитайте нарастающим итогом сумму всех платежей для каждого покупателя, сортировка должна 
+--1.1Пронумеруйте все платежи от 1 до N по дате
+--1.2Пронумеруйте платежи для каждого покупателя, сортировка платежей должна быть по дате
+--1.3Посчитайте нарастающим итогом сумму всех платежей для каждого покупателя, сортировка должна 
 --быть сперва по дате платежа, а затем по сумме платежа от наименьшей к большей
---Пронумеруйте платежи для каждого покупателя по стоимости платежа от наибольших к меньшим 
+--1.4Пронумеруйте платежи для каждого покупателя по стоимости платежа от наибольших к меньшим 
 --так, чтобы платежи с одинаковым значением имели одинаковое значение номера.
 --Можно составить на каждый пункт отдельный SQL-запрос, а можно объединить все колонки в одном запросе.
 
 
-select *, row_number() over (order by payment_date) as "Нумерация всех",
-	row_number() over (order by customer_id ,payment_date ) as "Нумерация по пользователю",
-	sum(amount) over (partition by customer_id order by payment_date rows between unbounded preceding and current row) as "Сумма с нарастающим по юзеру"  
+select *, 
+row_number() over (order by payment_date) as "1.1Нумерация всех",
+row_number() over(partition by customer_id order by payment_date) as"1.2_Платежи по каждому пользователю",
+sum(amount) over (partition by customer_id order by payment_date rows between unbounded preceding and current row) as "Сумма с нарастающим по юзеру",
+rank()over(partition by customer_id order by amount desc)	
 from payment p 
 
 --ЗАДАНИЕ №2
@@ -28,11 +30,11 @@ join customer c on p.customer_id = c.customer_id
 --ЗАДАНИЕ №3
 --С помощью оконной функции определите, на сколько каждый следующий платеж покупателя больше или меньше текущего.
 select c.first_name, c.last_name , p.amount, 
-	LAG(amount,1,'0.0') over(partition by c.customer_id order by c.customer_id, p.payment_date) "previous_amount",
-	Lead(amount,1,'0.0') over(partition by c.customer_id order by c.customer_id,  p.payment_date) "next_amount",
+	LAG(amount,1,0.0) over(partition by c.customer_id order by c.customer_id, p.payment_date) "previous_amount",
+	Lead(amount,1,0.0) over(partition by c.customer_id order by c.customer_id,  p.payment_date) "next_amount",
 	case 
-		when (Lead(amount,1,'0.0') over(partition by c.customer_id order by c.customer_id,  p.payment_date) - p.amount) >0 then concat('Больше текущего на ',CAST((Lead(amount,1,'0.0') over(partition by c.customer_id order by c.customer_id,  p.payment_date) - p.amount) AS VARCHAR(15)))
-		else concat('Меньше текущего на ',CAST(abs((Lead(amount,1,'0.0') over(partition by c.customer_id order by c.customer_id,  p.payment_date) - p.amount)) AS VARCHAR(15)))
+		when (Lead(amount,1,0.0) over(partition by c.customer_id order by c.customer_id,  p.payment_date) - p.amount) >0 then concat('Больше текущего на ',CAST((Lead(amount,1,'0.0') over(partition by c.customer_id order by c.customer_id,  p.payment_date) - p.amount) AS VARCHAR(15)))
+		else concat('Меньше текущего на ',CAST(abs((Lead(amount,1,0.0) over(partition by c.customer_id order by c.customer_id,  p.payment_date) - p.amount)) AS VARCHAR(15)))
 		end	
 from payment p
 join customer c on p.customer_id = c.customer_id 
