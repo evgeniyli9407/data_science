@@ -59,27 +59,29 @@ from(select f.aircraft_code, (count(*) over(partition by f.aircraft_code)::numer
 group by t.aircraft_code, t.prcnt
 
 --7	Были ли города, в которые можно  добраться бизнес - классом дешевле, чем эконом-классом в рамках перелета?	- CTE
--- ОТВЕТ: В рамках перелета таких городов нет, но если не брать в разрезе перелета, то есть
-with cte_ as (
-    select   
-        city,
-        f.flight_id,
-        fare_conditions, 
-        amount
-    from ticket_flights tf   
-    join flights as f using(flight_id)
-    join airports as ad on f.arrival_airport = ad.airport_code 
-    order by city, fare_conditions asc
-    )
-select  
-    city as "Список городов",
-     max(CASE WHEN fare_conditions = 'Economy' THEN amount ELSE NULL END) as Max_Economy,
-     min(CASE WHEN fare_conditions = 'Business' THEN amount ELSE NULL END) as Min_Business 
-from cte_
-group by city,fare_conditions 
-having max(CASE WHEN fare_conditions = 'Economy' THEN amount ELSE NULL END) >= min(CASE WHEN fare_conditions = 'Business' THEN amount ELSE NULL END)
---having max(amount) filter (where fare_conditions = 'Economy') > min(amount) filter(where fare_conditions = 'Business') 
-order by city asc 
+-- ОТВЕТ: В рамках перелета таких городов нет
+with c1 as (
+	select f.flight_id,a.city,tf.fare_conditions, min(tf.amount), max(tf.amount)
+	from flights f 
+	left join airports a on a.airport_code =f.arrival_airport 
+	left join ticket_flights tf on tf.flight_id =f.flight_id 
+	group by 3,2,1
+	having tf.fare_conditions is not null 
+	order by f.flight_id 	
+), 
+cte_1 as (
+	select c1.flight_id as "flight_id_x", c1.city as "city_x",c1.fare_conditions as "fare_conditions_x", c1.min as "min_x"
+	from c1
+	where c1.fare_conditions = 'Business'
+), cte_2 as (
+	select c1.flight_id as "flight_id_y", c1.city as "city_y",c1.fare_conditions as "fare_conditions_y", c1.max as "max_y"
+	from c1
+	where c1.fare_conditions = 'Economy'
+)
+select "max_y", "min_x","city_y"
+from cte_2
+inner join cte_1 on "flight_id_x" = "flight_id_y"
+where "max_y">"min_x"
 
 
 
@@ -88,14 +90,12 @@ order by city asc
 --- Оператор EXCEPT
 
 select a.city, b.city 
-from airports a cross join airports b 
-where a.city <> b.city
-except 
-select a.city, b.city 
 from airports a 
-inner join flights f on a.airport_name=f.departure_airport 
-inner join airports b on b.airport_name=f.arrival_airport
-
+cross join airports b 
+where a.city != b.city
+except 
+select r.departure_city, r.arrival_city 
+from routes r 
 --9	Вычислите расстояние между аэропортами, связанными прямыми рейсами, сравните с допустимой максимальной дальностью перелетов  в самолетах, обслуживающих эти рейсы *	
 -- Оператор RADIANS или использование sind/cosd
 --- CASE 
